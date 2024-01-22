@@ -14,7 +14,7 @@ OBJ = \
  $(OUTPUT_FOLDER)/main.o \
  $(OUTPUT_FOLDER)/uart.o
 
-.PHONY: clean 
+all: run
 
 clean:
 	rm -f $(OUTPUT_FOLDER)/* 
@@ -27,6 +27,9 @@ $(OUTPUT_FOLDER)/%.o: %.s | $(OUTPUT_FOLDER)
 	@$(COMPILER) $(CFLAGS) $< -o $@
 
 $(OUTPUT_FOLDER)/%.o: src/%.c | $(OUTPUT_FOLDER)
+	@$(COMPILER) $(CFLAGS) $< -o $@
+
+$(OUTPUT_FOLDER)/%.o: src/drivers/*/%.c | $(OUTPUT_FOLDER)
 	@$(COMPILER) $(CFLAGS) $< -o $@
 
 $(OUTPUT_FOLDER)/$(KERNEL_FILE): $(OBJ) 

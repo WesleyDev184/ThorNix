@@ -11,7 +11,6 @@ void puts(char *s)
 
 void welcomeScreen()
 {
-    puts(BG_WHITE);
     puts(BOLD BLACK);
     puts("      ------------------     \n");
     puts("     |                  |    \n");
@@ -25,49 +24,52 @@ void welcomeScreen()
     puts("             |  |            \n");
     puts("             |  |            \n");
     puts("              --             \n");
-    puts(BG_YELLOW GREEN);
-    puts("    Licensed under GPLv3:    \n");
     puts(RESET_COLOR RESET_BOLD);
+    puts("    Licensed under GPLv3:    \n");
     puts("\n");
 }
 
-// void displayProgressBar(int progress)
-// {
-//     if (progress > 10)
-//     {
-//         puts("Progress is full!\n");
-//         return;
-//     }
+void displayProgressBar(int progress)
+{
+    // sobrescreve a barra de progresso anterior
+    puts("\033[1A");
+    puts(CLEAR_LINE);
 
-//     // Definições de cores
-//     char *colors[] = {YELLOW, GREEN, CYAN, MAGENTA, BLUE};
-//     int numColors = sizeof(colors) / sizeof(colors[0]);
+    if (progress > 10)
+    {
+        puts("Progress is full!\n");
+        return;
+    }
 
-//     puts(BOLD CYAN);
-//     puts("Progress: [");
+    // Definições de cores
+    char *colors[] = {YELLOW, GREEN, CYAN, MAGENTA, BLUE};
+    int numColors = sizeof(colors) / sizeof(colors[0]);
 
-//     int i;
-//     for (i = 0; i < 10; ++i)
-//     {
-//         if (i < progress)
-//         {
-//             int colorIndex = i / 2 % numColors;
-//             puts(colors[colorIndex]); // Troca de cor a cada 2 blocos
-//             puts("■");
-//         }
-//         else
-//             puts(RED "■");
+    puts(BOLD CYAN);
+    puts("Progress: [");
 
-//         if (i == 4)
-//             puts(RESET_COLOR BOLD CYAN); // Troca de cor após 5 blocos
-//         else
-//             puts(RESET_COLOR BOLD CYAN);
-//     }
+    int i;
+    for (i = 0; i < 10; ++i)
+    {
+        if (i < progress)
+        {
+            int colorIndex = progress / 2 % numColors;
+            puts(colors[colorIndex]); // Troca de cor a cada 2 blocos
+            puts("■");
+        }
+        else
+            puts(RED "■");
 
-//     puts(RESET_COLOR BOLD CYAN "]");
-//     puts(RESET_COLOR);
-//     puts("\n");
-// }
+        if (i == 4)
+            puts(RESET_COLOR BOLD CYAN); // Troca de cor após 5 blocos
+        else
+            puts(RESET_COLOR BOLD CYAN);
+    }
+
+    puts(RESET_COLOR BOLD CYAN "]");
+    puts(RESET_COLOR);
+    puts("\n");
+}
 
 void entry()
 {
@@ -77,7 +79,7 @@ void entry()
     uart_init();
     puts(CLEAR_SCREEN CURSOR_UP_LEFT); /* Clear screen and move cursor to 1,1 */
     welcomeScreen();
-    // displayProgressBar(progress);
+    displayProgressBar(progress);
     for (;;)
     {
         c = uart_getc();
@@ -97,10 +99,10 @@ void entry()
             uart_putc('\b'); /* move the cursor to the left again */
             break;
 
-            // case 110: /* 'n' */
-            //     progress++;
-            //     displayProgressBar(progress);
-            //     break;
+        case 110: /* 'n' */
+            progress++;
+            displayProgressBar(progress);
+            break;
 
         default:
             uart_putc(c);

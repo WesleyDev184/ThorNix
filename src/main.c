@@ -1,7 +1,16 @@
-#include <stdio.h>
+#define uart_base 0x10000000
+
+static void putc(char c){
+    volatile char *reg = (char *) uart_base;
+    *reg = c;
+}
+
+void puts(char *s){
+    while(*s){
+        putc(*s++);
+    }
+}
 
 void entry(){
-  int a = 1;
-  int b = 2;
-  int c = a + b;
+   puts("Olá mundo! Disse ThorNix\n");  
 }

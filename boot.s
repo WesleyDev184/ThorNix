@@ -1,5 +1,5 @@
 .global _start
-.equ STACK_SIZE, 0x1000 # tamanho da pilha
+.equ STACK_SIZE, 4096 # tamanho da pilha
 # mhartid e o registrador que contem o id da cpu
 
 _start:

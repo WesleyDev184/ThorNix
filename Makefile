@@ -12,7 +12,10 @@ QEMUFLAGS = -append 'console=ttyS0' -nographic -serial mon:stdio -smp 4 -machine
 OBJ = \
  $(OUTPUT_FOLDER)/boot.o \
  $(OUTPUT_FOLDER)/main.o \
- $(OUTPUT_FOLDER)/uart.o
+ $(OUTPUT_FOLDER)/uart.o \
+ $(OUTPUT_FOLDER)/core.o \
+ $(OUTPUT_FOLDER)/display.o \
+ $(OUTPUT_FOLDER)/teste_functions.o 
 
 all: run
 
@@ -30,6 +33,9 @@ $(OUTPUT_FOLDER)/%.o: src/%.c | $(OUTPUT_FOLDER)
 	@$(COMPILER) $(CFLAGS) $< -o $@
 
 $(OUTPUT_FOLDER)/%.o: src/drivers/*/%.c | $(OUTPUT_FOLDER)
+	@$(COMPILER) $(CFLAGS) $< -o $@
+
+$(OUTPUT_FOLDER)/%.o: src/components/*/%.c | $(OUTPUT_FOLDER)
 	@$(COMPILER) $(CFLAGS) $< -o $@
 
 $(OUTPUT_FOLDER)/$(KERNEL_FILE): $(OBJ) 

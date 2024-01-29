@@ -1,5 +1,5 @@
-#include "headers/memlayout.h"
-#include "headers/types.h"
+#include "../../headers/memlayout.h"
+#include "../../headers/types.h"
 
 #define RBR 0 // Receiver buffer register
 #define THR 0 // REGISTRADOR DE TRANSMISSAO DE DADOS

@@ -1,0 +1,1 @@
+static char *digits = "0123456789abcdef";

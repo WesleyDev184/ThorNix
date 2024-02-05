@@ -26,6 +26,12 @@ clean:
 run: $(OUTPUT_FOLDER)/$(KERNEL_FILE)
 	@$(QEMU) $(QEMUFLAGS) -kernel $<
 
+debug: $(OUTPUT_FOLDER)/$(KERNEL_FILE)
+	@$(QEMU) $(QEMUFLAGS) -kernel $< -S -gdb tcp::1234	
+
+$(OUTPUT_FOLDER)/$(KERNEL_FILE): $(OBJ) 
+	@$(LINKER) $(LDFLAGS) -o $@ $^
+
 $(OUTPUT_FOLDER)/%.o: %.s | $(OUTPUT_FOLDER)
 	@$(COMPILER) $(CFLAGS) $< -o $@
 
@@ -37,9 +43,6 @@ $(OUTPUT_FOLDER)/%.o: src/drivers/*/%.c | $(OUTPUT_FOLDER)
 
 $(OUTPUT_FOLDER)/%.o: src/components/*/%.c | $(OUTPUT_FOLDER)
 	@$(COMPILER) $(CFLAGS) $< -o $@
-
-$(OUTPUT_FOLDER)/$(KERNEL_FILE): $(OBJ) 
-	@$(LINKER) $(LDFLAGS) -o $@ $^
 
 $(OUTPUT_FOLDER):
 	mkdir -p $@

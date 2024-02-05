@@ -1,5 +1,6 @@
 #include "headers/defs.h"
 #include "headers/console.h"
+#include "headers/types.h"
 
 void entry()
 {
@@ -9,13 +10,11 @@ void entry()
     puts(CLEAR_SCREEN CURSOR_UP_LEFT); /* Clear screen and move cursor to 1,1 */
     welcomeScreen();
 
-    int per = perimeter(4, 5, 5, 5, 5);
-    printlng(per, 10);
-    puts("\n");
-    printlng(per, 16);
-    puts("\n");
-    printlng(per, 2);
-    puts("\n");
+    printf("Hello World!\n");
+    printf("%d\n", 123);
+
+    printf("Ponteiro falso: %p\n endereço de c %p\n Binario %b\n Caracter %c\n", 0x1234, &c, 3, 'a');
+    printf("%\n");
 
     for (;;)
     {

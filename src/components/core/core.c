@@ -1,3 +1,5 @@
+#include <stdarg.h>
+
 #include "../../headers/defs.h"
 #include "../../headers/statics.h"
 #include "../../headers/types.h"
@@ -10,9 +12,73 @@ void puts(char *s)
   }
 }
 
-void printptr(uint64 *ptr)
+void printf(char *format, ...)
 {
-  printlng((long int)ptr, 16);
+  va_list arg;
+  int c;
+  char *str;
+
+  va_start(arg, format);
+  for (; (c = *format) != 0; format++)
+  {
+    if (c != '%')
+    {
+      uart_putc(c);
+    }
+    else
+    {
+      c = *++format;
+      switch (c)
+      {
+      case 'd':
+        printlng(va_arg(arg, int), 10);
+        break;
+      case 'x':
+        printlng(va_arg(arg, int), 16);
+        break;
+      case 'b':
+        printlng(va_arg(arg, int), 2);
+        break;
+      case 'l':
+        printlng(va_arg(arg, long), 10);
+        break;
+      case 's':
+        str = va_arg(arg, char *);
+        puts(str);
+        break;
+      case 'c':
+        uart_putc(va_arg(arg, int));
+        break;
+      case 'p':
+        printptr(va_arg(arg, void *));
+        break;
+      case '%':
+        puts("%");
+        break;
+      }
+    }
+  }
+}
+
+void printptr(void *ptr)
+{
+  uint64 addr = (uint64)ptr;
+  char s[66];
+  int i = 0;
+
+  while (addr)
+  {
+    s[i++] = digits[addr % 16];
+    addr = addr / 16;
+  }
+
+  s[i++] = 'x';
+  s[i++] = '0';
+
+  while (i >= 0)
+  {
+    uart_putc(s[--i]);
+  }
 }
 
 void printlng(long int val, int base)
@@ -45,12 +111,6 @@ void printlng(long int val, int base)
   if (base == 16)
   {
     s[i++] = 'x';
-    s[i++] = '0';
-  }
-
-  if (base == 2)
-  {
-    s[i++] = 'b';
     s[i++] = '0';
   }
 

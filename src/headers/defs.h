@@ -5,7 +5,8 @@ void uart_init();
 
 // core functions - path: src/components/core/core.c
 void puts(char *s);
-void printptr(uint64 *ptr);
+void printf(char *format, ...);
+void printptr(void *ptr);
 void printlng(long int val, int base);
 
 // display functions - path: src/components/display/display.c

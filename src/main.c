@@ -5,16 +5,17 @@
 void entry()
 {
     int c;
-    int progress = 0;
     uart_init();
     puts(CLEAR_SCREEN CURSOR_UP_LEFT); /* Clear screen and move cursor to 1,1 */
+    memory_init();
     welcomeScreen();
 
-    printf("Hello World!\n");
-    printf("%d\n", 123);
+    int progress = 0;
+    // printf("Hello World!\n");
+    // printf("%d\n", 123);
 
-    printf("Ponteiro falso: %p\n endereço de c %p\n Binario %b\n Caracter %c\n", 0x1234, &c, 3, 'a');
-    printf("%\n");
+    // printf("Ponteiro falso: %p\n endereço de c %p\n Binario %b\n Caracter %c\n", 0x1234, &c, 3, 'a');
+    // printf("%\n");
 
     for (;;)
     {

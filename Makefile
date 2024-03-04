@@ -6,7 +6,7 @@ LINKER = $(RISCV_BASE)-ld
 QEMU = qemu-system-riscv64
 
 CFLAGS = -ffreestanding -march=rv64g -mabi=lp64 -Wall -c -g -O0
-LDFLAGS = -nostdlib -Ttext=0x80000000
+LDFLAGS = -nostdlib -Tkernel.ld
 QEMUFLAGS = -append 'console=ttyS0' -nographic -serial mon:stdio -smp 4 -machine virt -bios none
 
 OBJ = \
@@ -15,7 +15,8 @@ OBJ = \
  $(OUTPUT_FOLDER)/uart.o \
  $(OUTPUT_FOLDER)/core.o \
  $(OUTPUT_FOLDER)/display.o \
- $(OUTPUT_FOLDER)/teste_functions.o 
+ $(OUTPUT_FOLDER)/teste_functions.o \
+ $(OUTPUT_FOLDER)/memory.o
 
 all: run
 

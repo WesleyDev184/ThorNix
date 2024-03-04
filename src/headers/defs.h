@@ -3,6 +3,10 @@ int uart_getc();
 void uart_putc(char c);
 void uart_init();
 
+// Memory functions - path: src/drivers/Memory/memory.c
+void memory_init();
+void *kalloc(int pages);
+
 // core functions - path: src/components/core/core.c
 void puts(char *s);
 void printf(char *format, ...);

@@ -124,3 +124,14 @@ void printlng(long int val, int base)
     uart_putc(s[--i]);
   }
 }
+
+void strcopy(char *dest, char *src)
+{
+  while (*src != 0)
+  {
+    *dest = *src;
+    dest++;
+    src++;
+  }
+  *dest = 0;
+}

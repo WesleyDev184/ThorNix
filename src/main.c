@@ -15,7 +15,6 @@ void entry()
     // printf("%d\n", 123);
 
     // printf("Ponteiro falso: %p\n endereço de c %p\n Binario %b\n Caracter %c\n", 0x1234, &c, 3, 'a');
-    // printf("%\n");
 
     for (;;)
     {

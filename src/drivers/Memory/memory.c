@@ -101,23 +101,6 @@ void pages_init()
     alloc_start = page_round_up((uint64)HEAP_START + reserved_pages * PAGE_SIZE);
 }
 
-void memory_init()
-{
-    printf("Iniciando memoria ...\n");
-    pages_init();
-
-    // printf("Descritores de paginas inicializadas\n");
-    // printf("layout de memoria inicializado\n");
-    // printf("inicio do codigo:\t %p\n", KERNEL_START);
-    // printf("fim do codigo:\t %p\n", text_end);
-    // printf("inicio do heap:\t %p\n", HEAP_START);
-    // printf("fim do heap:\t %p\n", HEAP_END);
-    // printf("inicio da Pilha:\t %p\n", stack_start);
-    // printf("Fim da pilha:\t %p\n", stack_end);
-    // printf("Inicio dos dados:\t %p\n", text_end);
-    // printf("fim dos dados:\t %p\n", HEAP_START);
-}
-
 void *kalloc(int pages)
 {
     // Aloca paginas
@@ -174,4 +157,62 @@ void *kalloc(int pages)
     int desc_pos = (uint64)fp_desc - (uint64)HEAP_START;
 
     return (void *)alloc_start + desc_pos * PAGE_SIZE;
+}
+
+void kfree(void *ptr)
+{
+    // libera paginas
+    uint8 *desc = (uint8 *)HEAP_START + ((uint64)ptr - alloc_start) / PAGE_SIZE;
+
+    while (!last_page(*desc))
+    {
+        set_free_page_flag(desc, FREEPG);
+        desc++;
+    }
+
+    set_free_page_flag(desc, FREEPG);
+}
+
+void memory_init()
+{
+    printf("Iniciando memoria ...\n");
+    pages_init();
+
+    // printf("Descritores de paginas inicializadas\n");
+    // printf("layout de memoria inicializado\n");
+    // printf("inicio do codigo:\t %p\n", KERNEL_START);
+    // printf("fim do codigo:\t %p\n", text_end);
+    // printf("inicio do heap:\t %p\n", HEAP_START);
+    // printf("fim do heap:\t %p\n", HEAP_END);
+    // printf("inicio da Pilha:\t %p\n", stack_start);
+    // printf("Fim da pilha:\t %p\n", stack_end);
+    // printf("Inicio dos dados:\t %p\n", text_end);
+    // printf("fim dos dados:\t %p\n", HEAP_START);
+    printf("Regiao alocavel do heap %p\n", (uint8 *)alloc_start);
+
+    char *p1 = kalloc(1);
+    char *p2 = kalloc(1);
+    char *p3 = kalloc(1);
+    printf("p1: %p\n", p1);
+    printf("p2: %p\n", p2);
+    printf("p3: %p\n", p3);
+
+    *p1 = 'O';
+    *(p1 + 1) = 'l';
+    p1[2] = 'a';
+    p1[3] = '\0'; // termina a string
+    printf("conteudo p1: %s\n", p1);
+
+    p2 = "Ola";
+    printf("conteudo p2: %s\n", p2);
+
+    strcopy(p3, "Ola");
+    printf("conteudo p3: %s\n", p3);
+
+    printf("endereço p1 antes de desalocar %p\n", p1);
+    kfree(p1);
+
+    printf("nova alocacao\n");
+    char *p4 = kalloc(1);
+    printf("endereço p4 %p\n", p4);
 }

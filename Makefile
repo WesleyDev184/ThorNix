@@ -16,7 +16,9 @@ OBJ = \
  $(OUTPUT_FOLDER)/core.o \
  $(OUTPUT_FOLDER)/display.o \
  $(OUTPUT_FOLDER)/teste_functions.o \
- $(OUTPUT_FOLDER)/memory.o
+ $(OUTPUT_FOLDER)/memory.o \
+ $(OUTPUT_FOLDER)/trap.o \
+ $(OUTPUT_FOLDER)/trap_handler.o
 
 all: run
 
@@ -34,6 +36,9 @@ $(OUTPUT_FOLDER)/$(KERNEL_FILE): $(OBJ)
 	@$(LINKER) $(LDFLAGS) -o $@ $^
 
 $(OUTPUT_FOLDER)/%.o: %.s | $(OUTPUT_FOLDER)
+	@$(COMPILER) $(CFLAGS) $< -o $@
+
+$(OUTPUT_FOLDER)/%.o: src/drivers/*/%.s | $(OUTPUT_FOLDER)
 	@$(COMPILER) $(CFLAGS) $< -o $@
 
 $(OUTPUT_FOLDER)/%.o: src/%.c | $(OUTPUT_FOLDER)

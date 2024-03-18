@@ -188,31 +188,31 @@ void memory_init()
     // printf("Fim da pilha:\t %p\n", stack_end);
     // printf("Inicio dos dados:\t %p\n", text_end);
     // printf("fim dos dados:\t %p\n", HEAP_START);
-    printf("Regiao alocavel do heap %p\n", (uint8 *)alloc_start);
+    // printf("Regiao alocavel do heap %p\n", (uint8 *)alloc_start);
 
-    char *p1 = kalloc(1);
-    char *p2 = kalloc(1);
-    char *p3 = kalloc(1);
-    printf("p1: %p\n", p1);
-    printf("p2: %p\n", p2);
-    printf("p3: %p\n", p3);
+    // char *p1 = kalloc(1);
+    // char *p2 = kalloc(1);
+    // char *p3 = kalloc(1);
+    // printf("p1: %p\n", p1);
+    // printf("p2: %p\n", p2);
+    // printf("p3: %p\n", p3);
 
-    *p1 = 'O';
-    *(p1 + 1) = 'l';
-    p1[2] = 'a';
-    p1[3] = '\0'; // termina a string
-    printf("conteudo p1: %s\n", p1);
+    // *p1 = 'O';
+    // *(p1 + 1) = 'l';
+    // p1[2] = 'a';
+    // p1[3] = '\0'; // termina a string
+    // printf("conteudo p1: %s\n", p1);
 
-    p2 = "Ola";
-    printf("conteudo p2: %s\n", p2);
+    // p2 = "Ola";
+    // printf("conteudo p2: %s\n", p2);
 
-    strcopy(p3, "Ola");
-    printf("conteudo p3: %s\n", p3);
+    // strcopy(p3, "Ola");
+    // printf("conteudo p3: %s\n", p3);
 
-    printf("endereço p1 antes de desalocar %p\n", p1);
-    kfree(p1);
+    // printf("endereço p1 antes de desalocar %p\n", p1);
+    // kfree(p1);
 
-    printf("nova alocacao\n");
-    char *p4 = kalloc(1);
-    printf("endereço p4 %p\n", p4);
+    // printf("nova alocacao\n");
+    // char *p4 = kalloc(1);
+    // printf("endereço p4 %p\n", p4);
 }

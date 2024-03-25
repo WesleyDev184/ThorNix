@@ -1,20 +1,17 @@
 #include "headers/defs.h"
 #include "headers/console.h"
 #include "headers/types.h"
+#include "headers/riscv.h"
 
-void entry()
+extern void mvector(void);
+
+int main()
 {
+    // execulta o main no modo supervisor
     int c;
-    uart_init();
-    puts(CLEAR_SCREEN CURSOR_UP_LEFT); /* Clear screen and move cursor to 1,1 */
-    memory_init();
-    welcomeScreen();
-
     int progress = 0;
-    // printf("Hello World!\n");
-    // printf("%d\n", 123);
-
-    // printf("Ponteiro falso: %p\n endereço de c %p\n Binario %b\n Caracter %c\n", 0x1234, &c, 3, 'a');
+    puts(CLEAR_SCREEN CURSOR_UP_LEFT); /* Clear screen and move cursor to 1,1 */
+    welcomeScreen();
 
     for (;;)
     {
@@ -24,6 +21,11 @@ void entry()
 
         switch (c)
         {
+        case 'E':
+            // Força uma exceção
+            r_mstatus(); // Tenta ler o registrador no modo Supervisor
+            break;
+
         case '\r':           /* Enter - 13 */
             uart_putc('\r'); /* Carriage return */
             uart_putc('\n'); /* New line */
@@ -44,4 +46,29 @@ void entry()
             uart_putc(c);
         }
     }
+}
+
+// ponto de entrada do kernel depois do boot
+void entry()
+{
+    memory_init();
+    uart_init();
+
+    // CSR mtvec <- "mvector"
+    // quando uma exceção ocorrer, o processador irá pular para o endereço de "mvector"
+    w_mtvec((uint64)mvector);
+
+    // Estamos no modo Maquina(M), um modo mais privilegiado
+    // Muda para o modo supervisor(U), um modo menos privilegiado
+    uint64 x = r_mstatus();
+    // Zera os bits de MPP
+    x = x & ~MSTATUS_MPP_MASK;
+    // Seta o bit de MPP para 1
+    x = x | MSTATUS_MPP_S;
+    w_mstatus(x);
+
+    // CSR mepc <- "main"
+    // mepc é um registrador que armazena o endereço da próxima instrução a ser executada
+    w_mepc((uint64)main);
+    asm volatile("mret"); // Salta para o endereço armazenado em mepc
 }

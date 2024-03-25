@@ -1,10 +1,14 @@
 #include "../../headers/types.h"
 #include "../../headers/defs.h"
 #include "../../headers/memlayout.h"
+#include "../../headers/riscv.h"
+#include "../../headers/proc.h"
 
 extern uint64 stack_start[]; // a variavel ja foi criada em outro
 extern uint64 stack_end[];
 extern char text_end[];
+
+trap_frame trap_f[4];
 
 long total_pages; // total de paginas do heap
 long alloc_start; // inicio da regiao alocavel do heap
@@ -177,6 +181,11 @@ void memory_init()
 {
     printf("Iniciando memoria ...\n");
     pages_init();
+
+    w_mscratch((uint64)&trap_f[0]);
+    trap_f[0].trap_stack = kalloc(1); // aloca uma pagina para a pilha
+    // memset(trap_f[0].trap_stack, 0, PAGE_SIZE); // limpa a pilha
+    trap_f[0].trap_stack += PAGE_SIZE; // Base da pilha
 
     // printf("Descritores de paginas inicializadas\n");
     // printf("layout de memoria inicializado\n");

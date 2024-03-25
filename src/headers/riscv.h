@@ -61,3 +61,9 @@ w_mie(uint64 x)
 {
   asm volatile("csrw mie, %0" : : "r"(x));
 }
+
+static inline void
+w_mtvec(uint64 x)
+{
+  asm volatile("csrw mtvec, %0" : : "r"(x));
+}

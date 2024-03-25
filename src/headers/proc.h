@@ -39,4 +39,4 @@ struct trap_frame_t
   uint64 epc; // endereço da instrução que causou a exceção
 };
 
-typedef struct trap_frame_t trap_frame_t;
+typedef struct trap_frame_t trap_frame;

@@ -1,0 +1,1 @@
+void *memset(void *b, int c, int len);

@@ -3,6 +3,7 @@
 #include "../../headers/proc.h"
 #include "../../headers/riscv.h"
 #include "../../headers/defs.h"
+#include "../../headers/memlayout.h"
 
 /**
  * Handles exceptions and interrupts in the system.
@@ -14,6 +15,7 @@
 void mtrap(uint64 tval, uint64 mcause, trap_frame *tf)
 {
   uint16 cause;
+  uint64 *mtimecmp = (uint64 *)CLINT_MTIMECMP(0);
   if ((long)mcause > 0)
   {
     // Exceção síncrona
@@ -29,6 +31,15 @@ void mtrap(uint64 tval, uint64 mcause, trap_frame *tf)
       {
         printf("\t Primeira chamada de sistema ...\n");
       }
+
+      if (tf->a7 == 2)
+      {
+        for (int i = 0; i < tf->a1; i++)
+        {
+          uart_putc(((char *)tf->a0)[i]);
+        }
+        printf("\n");
+      }
       tf->epc += 4;
     }
     else
@@ -42,6 +53,16 @@ void mtrap(uint64 tval, uint64 mcause, trap_frame *tf)
   {
     cause = mcause & 0xfff;
     // Exceção assincrona(interrupção)
-    panic("<trap.c - mtrap> tratando uma interrupção assincrona ....\n");
+    switch (cause)
+    {
+    case 7:
+      printf("<trap.c - \u23F0 > [CPU#:%d] Interrupção de temporizador\n", tf->hartid);
+      *mtimecmp = *(uint64 *)CLINT_MTIME + 10000000;
+      break;
+
+    default:
+      panic("<trap.c - mtrap> Exceção de causa desconhecida\n");
+      break;
+    }
   }
 }

@@ -2,6 +2,7 @@
 #include "headers/console.h"
 #include "headers/types.h"
 #include "headers/riscv.h"
+#include "headers/memlayout.h"
 
 extern void mvector(void);
 
@@ -76,5 +77,28 @@ void entry()
     // CSR mepc <- "main"
     // mepc é um registrador que armazena o endereço da próxima instrução a ser executada
     w_mepc((uint64)main);
+
+    /*
+        Habilita as interrupções
+        mstatus.MPIE <- 1
+    */
+
+    x = x | (1 << 7); // campo Mpie em 1
+    w_mstatus(x);
+
+    // Habilita as interrupções do timer
+    x = r_mie();
+    x = x | (1 << 7);  // Habilita o temporizador
+    x = x | (1 << 11); // Habilita a interrupção externa
+    w_mie(x);
+
+    // configura o temporizador
+    // intervalo de 1 segundo
+    uint64 *mtimecmp = (uint64 *)CLINT_MTIMECMP(0); // Processador 0
+    uint64 *mtime = (uint64 *)CLINT_MTIME;
+    *mtimecmp = *mtime + 10000000;
+
+        
+
     asm volatile("mret"); // Salta para o endereço armazenado em mepc
 }

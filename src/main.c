@@ -25,7 +25,13 @@ int main()
             // Força uma exceção
             r_mstatus(); // Tenta ler o registrador no modo Supervisor
             break;
-
+        case 'O':
+            // system call Ola
+            ola();
+            break;
+        case 'W':
+            write("Deixei toda esperança, ó vós que entrais!\n", 12);
+            break;
         case '\r':           /* Enter - 13 */
             uart_putc('\r'); /* Carriage return */
             uart_putc('\n'); /* New line */

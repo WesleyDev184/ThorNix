@@ -14,6 +14,11 @@ void printf(char *format, ...);
 void printptr(void *ptr);
 void printlng(long int val, int base);
 void strcopy(char *dest, char *src);
+void panic(char *msg);
+
+// syscall functions - path: src/components/syscall/syscall.s
+void ola();
+void write(char *s, int len);
 
 // display functions - path: src/components/display/display.c
 void welcomeScreen();

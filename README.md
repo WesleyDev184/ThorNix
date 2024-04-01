@@ -51,4 +51,4 @@ Contribuições são bem-vindas! Para contribuir, por favor, abra uma issue ou e
 
 ## Licença
 
-Este projeto está licenciado sob a licença MIT. Para mais informações, por favor, leia o arquivo [GNU GENERAL PUBLIC LICENSE](https://www.gnu.org/licenses/gpl-3.0.html).
+Este projeto está licenciado sob a licença GNU. Para mais informações, por favor, leia o arquivo [GNU GENERAL PUBLIC LICENSE](https://www.gnu.org/licenses/gpl-3.0.html).

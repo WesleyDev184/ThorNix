@@ -18,9 +18,11 @@ OBJ = \
  $(OUTPUT_FOLDER)/teste_functions.o \
  $(OUTPUT_FOLDER)/memory.o \
  $(OUTPUT_FOLDER)/trap.o \
- $(OUTPUT_FOLDER)/trap_handler.o
+ $(OUTPUT_FOLDER)/trap_handler.o \
+ $(OUTPUT_FOLDER)/string.o \
+ $(OUTPUT_FOLDER)/syscall.o 
 
-all: run
+all: $(OUTPUT_FOLDER)/$(KERNEL_FILE)
 
 clean:
 	rm -f $(OUTPUT_FOLDER)/* 

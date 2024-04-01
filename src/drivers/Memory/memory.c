@@ -1,3 +1,12 @@
+/**
+ * @file memory.c
+ * @brief Memory management functions for the ThorNix operating system.
+ *
+ * This file contains functions for managing memory in the ThorNix operating system.
+ * It includes functions for initializing memory pages, allocating and freeing memory,
+ * and setting flags for page descriptors.
+ */
+
 #include "../../headers/types.h"
 #include "../../headers/defs.h"
 #include "../../headers/memlayout.h"
@@ -20,6 +29,12 @@ long alloc_start; // inicio da regiao alocavel do heap
 #define FREEPG 0X1 // PAGINA LIVRE
 #define LASTPG 0X2 // ULTIMA PAGINA DO BLOCO ALOCADO?
 
+/**
+ * Checks if a page descriptor has the FREEPG flag set.
+ *
+ * @param desc The page descriptor.
+ * @return 1 if the FREEPG flag is set, 0 otherwise.
+ */
 int free_page(uint8 desc)
 {
     if (desc & FREEPG)
@@ -27,6 +42,12 @@ int free_page(uint8 desc)
     return 0;
 }
 
+/**
+ * Checks if a page descriptor has the LASTPG flag set.
+ *
+ * @param desc The page descriptor.
+ * @return 1 if the LASTPG flag is set, 0 otherwise.
+ */
 int last_page(uint8 desc)
 {
     if (desc &= LASTPG)
@@ -34,6 +55,12 @@ int last_page(uint8 desc)
     return 0;
 }
 
+/**
+ * Sets the FREEPG flag of a page descriptor.
+ *
+ * @param desc Pointer to the page descriptor.
+ * @param flag The value to set the FREEPG flag to (1 or 0).
+ */
 void set_free_page_flag(uint8 *desc, uint8 flag)
 {
     // SETA A FLAG DE PAGINA LIVRE PARA 1
@@ -47,6 +74,12 @@ void set_free_page_flag(uint8 *desc, uint8 flag)
     }
 }
 
+/**
+ * Sets the LASTPG flag of a page descriptor.
+ *
+ * @param desc Pointer to the page descriptor.
+ * @param flag The value to set the LASTPG flag to (1 or 0).
+ */
 void set_last_page_flag(uint8 *desc, uint8 flag)
 {
     // seta a flag de ultima pagina para 1
@@ -60,9 +93,12 @@ void set_last_page_flag(uint8 *desc, uint8 flag)
     }
 }
 
-// page_round_up(4095) = 4096
-// page_round_up(5000) = 8192
-// retorna o endereco da pagina seguinte
+/**
+ * Rounds up an address to the next page boundary.
+ *
+ * @param addr The address to round up.
+ * @return The address of the next page.
+ */
 uint64 page_round_up(uint64 addr)
 {
     if (addr % PAGE_SIZE == 0)
@@ -73,13 +109,20 @@ uint64 page_round_up(uint64 addr)
     return addr - (addr % PAGE_SIZE) + PAGE_SIZE;
 }
 
-// page_round_down(4095) = 0
-// Aredonda o endereco para a pagina anterior
+/**
+ * Rounds down an address to the previous page boundary.
+ *
+ * @param addr The address to round down.
+ * @return The address of the previous page.
+ */
 uint64 page_round_down(uint64 addr)
 {
     return addr - (addr % PAGE_SIZE);
 }
 
+/**
+ * Initializes the memory pages for the heap.
+ */
 void pages_init()
 {
     // Inicializa as paginas do heap
@@ -105,6 +148,12 @@ void pages_init()
     alloc_start = page_round_up((uint64)HEAP_START + reserved_pages * PAGE_SIZE);
 }
 
+/**
+ * Allocates a specified number of pages in the heap.
+ *
+ * @param pages The number of pages to allocate.
+ * @return A pointer to the allocated memory, or 0 if allocation fails.
+ */
 void *kalloc(int pages)
 {
     // Aloca paginas
@@ -163,6 +212,11 @@ void *kalloc(int pages)
     return (void *)alloc_start + desc_pos * PAGE_SIZE;
 }
 
+/**
+ * Frees the memory allocated by kalloc().
+ *
+ * @param ptr A pointer to the memory to free.
+ */
 void kfree(void *ptr)
 {
     // libera paginas
@@ -177,6 +231,9 @@ void kfree(void *ptr)
     set_free_page_flag(desc, FREEPG);
 }
 
+/**
+ * Initializes the memory for the ThorNix operating system.
+ */
 void memory_init()
 {
     printf("Iniciando memoria ...\n");

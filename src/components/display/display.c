@@ -1,6 +1,11 @@
 #include "../../headers/defs.h"
 #include "../../headers/console.h"
 
+/**
+ * Displays a progress bar based on the given progress value.
+ *
+ * @param progress The progress value (between 0 and 10).
+ */
 void displayProgressBar(int progress)
 {
     if (progress == 1)
@@ -8,7 +13,7 @@ void displayProgressBar(int progress)
         puts("\n");
     }
 
-    // sobrescreve a barra de progresso anterior
+    // Overwrites the previous progress bar
     puts("\033[1A");
     puts(CLEAR_LINE);
 
@@ -18,7 +23,7 @@ void displayProgressBar(int progress)
         return;
     }
 
-    // Definições de cores
+    // Color definitions
     char *colors[] = {YELLOW, GREEN, CYAN, MAGENTA, BLUE};
     int numColors = sizeof(colors) / sizeof(colors[0]);
 
@@ -31,7 +36,7 @@ void displayProgressBar(int progress)
         if (i < progress)
         {
             int colorIndex = progress / 2 % numColors;
-            puts(colors[colorIndex]); // Troca de cor a cada 2 blocos
+            puts(colors[colorIndex]); // Color changes every 2 blocks
             puts("■");
         }
         else
@@ -43,6 +48,9 @@ void displayProgressBar(int progress)
     puts("\n");
 }
 
+/**
+ * Displays the welcome screen of the application.
+ */
 void welcomeScreen()
 {
     puts(BOLD BLACK);

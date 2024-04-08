@@ -16,6 +16,8 @@ void mtrap(uint64 tval, uint64 mcause, trap_frame *tf)
 {
   uint16 cause;
   uint64 *mtimecmp = (uint64 *)CLINT_MTIMECMP(0);
+  uint64 *mtime = (uint64 *)CLINT_MTIME;
+
   if ((long)mcause > 0)
   {
     // Exceção síncrona
@@ -40,6 +42,26 @@ void mtrap(uint64 tval, uint64 mcause, trap_frame *tf)
         }
         printf("\n");
       }
+
+      // tratamento do syscall sleep (a0 = time in seconds)
+      if (tf->a7 == 3)
+      {
+        printf("\t Sleeping...\n");
+        int sec = tf->a0;
+        int start = *mtime;
+        int end = start + sec * 10000000;
+        while (*mtime < end)
+          ;
+        tf->a0 = (end - start) / 10000000;
+      }
+
+      // tratamento do syscall snakeGame
+      if (tf->a7 == 4)
+      {
+        printf("\t Chamando o jogo da cobrinha...\n");
+        tf->a0 = snakeGameMain();
+      }
+
       tf->epc += 4;
     }
     else
@@ -56,7 +78,7 @@ void mtrap(uint64 tval, uint64 mcause, trap_frame *tf)
     switch (cause)
     {
     case 7:
-      printf("<trap.c - \u23F0 > [CPU#:%d] Interrupção de temporizador\n", tf->hartid);
+      // printf("<trap.c - \u23F0 > [CPU#:%d] Interrupção de temporizador\n", tf->hartid);
       *mtimecmp = *(uint64 *)CLINT_MTIME + 10000000;
       break;
 

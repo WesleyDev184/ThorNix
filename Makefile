@@ -20,7 +20,9 @@ OBJ = \
  $(OUTPUT_FOLDER)/trap.o \
  $(OUTPUT_FOLDER)/trap_handler.o \
  $(OUTPUT_FOLDER)/string.o \
- $(OUTPUT_FOLDER)/syscall.o 
+ $(OUTPUT_FOLDER)/syscall.o \
+ $(OUTPUT_FOLDER)/snakeGame.o \
+ $(OUTPUT_FOLDER)/plic.o 
 
 all: $(OUTPUT_FOLDER)/$(KERNEL_FILE)
 

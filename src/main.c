@@ -11,6 +11,7 @@ int main()
     // execulta o main no modo supervisor
     int c;
     int progress = 0;
+    int i;
     puts(CLEAR_SCREEN CURSOR_UP_LEFT); /* Clear screen and move cursor to 1,1 */
     welcomeScreen();
 
@@ -22,9 +23,18 @@ int main()
 
         switch (c)
         {
+        case 'G':
+            i = snakeGame();
+            printf("Score: %d\n", i);
+            break;
+
         case 'E':
             // Força uma exceção
             r_mstatus(); // Tenta ler o registrador no modo Supervisor
+            break;
+        case 'S':
+            i = sleep(3);
+            printf("Sleep retornou %d\n", i);
             break;
         case 'O':
             // system call Ola
@@ -59,7 +69,6 @@ int main()
 void entry()
 {
     memory_init();
-    uart_init();
 
     // CSR mtvec <- "mvector"
     // quando uma exceção ocorrer, o processador irá pular para o endereço de "mvector"
@@ -98,7 +107,10 @@ void entry()
     uint64 *mtime = (uint64 *)CLINT_MTIME;
     *mtimecmp = *mtime + 10000000;
 
-        
+    uart_init();
+    printf("Uart initialized ...\n");
+    plic_init();
+    printf("Plic initialized ...\n");
 
     asm volatile("mret"); // Salta para o endereço armazenado em mepc
 }

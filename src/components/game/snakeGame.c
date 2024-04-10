@@ -4,19 +4,16 @@
 #include "../../headers/riscv.h"
 #include "../../headers/memlayout.h"
 
-#define WIDTH 20
+#define WIDTH 40
 #define HEIGHT 20
 #define UP 'w'
 #define DOWN 's'
 #define LEFT 'a'
 #define RIGHT 'd'
-
-// typedef struct SnakeBody
-// {
-//   int x;
-//   int y;
-//   struct snakeGame *next;
-// } snakeBody;
+#define DOWN_ARROW "\u290B"
+#define UP_ARROW "\u290A"
+#define LEFT_ARROW "\u21DA"
+#define RIGHT_ARROW "\u21DB"
 
 uint64 *mtimecmp = (uint64 *)CLINT_MTIMECMP(0);
 uint64 *mtime = (uint64 *)CLINT_MTIME;
@@ -30,16 +27,16 @@ void Setup()
 {
   gameover = 0;
   dir = RIGHT;
-  x = WIDTH / 2;
-  y = HEIGHT / 2;
+  x = 1;
+  y = 1;
   nTail = 0;
 }
 
 void Draw()
 {
-  puts(CURSOR_UP_LEFT); /* Clear screen and move cursor to 1,1 */
+  puts(CURSOR_UP_LEFT);
   for (int i = 0; i < WIDTH + 2; i++)
-    printf("■");
+    printf("\u2588");
   printf("\n");
 
   for (int i = 0; i < HEIGHT; i++)
@@ -47,9 +44,25 @@ void Draw()
     for (int j = 0; j < WIDTH; j++)
     {
       if (j == 0)
-        printf("■");
+        printf("\u2588");
       if (i == y && j == x)
-        printf("$");
+        switch (dir)
+        {
+        case UP:
+          printf(UP_ARROW);
+          break;
+        case DOWN:
+          printf(DOWN_ARROW);
+          break;
+        case LEFT:
+          printf(LEFT_ARROW);
+          break;
+        case RIGHT:
+          printf(RIGHT_ARROW);
+          break;
+        default:
+          break;
+        }
       else
       {
         int printTail = 0;
@@ -57,7 +70,7 @@ void Draw()
         {
           if (tailX[k] == j && tailY[k] == i)
           {
-            printf("$");
+            printf("\u29D4");
             printTail = 1;
           }
         }
@@ -65,13 +78,13 @@ void Draw()
           printf(" ");
       }
       if (j == WIDTH - 1)
-        printf("■");
+        printf("\u2588");
     }
     printf("\n");
   }
 
   for (int i = 0; i < WIDTH + 2; i++)
-    printf("■");
+    printf("\u2588");
   printf("\n");
 }
 
@@ -109,6 +122,8 @@ void Input()
 
 void Logic()
 {
+  nTail++;
+
   int prevX = tailX[0];
   int prevY = tailY[0];
   int prev2X, prev2Y;
@@ -123,6 +138,7 @@ void Logic()
     prevX = prev2X;
     prevY = prev2Y;
   }
+
   switch (dir)
   {
   case LEFT:
@@ -138,6 +154,7 @@ void Logic()
     y++;
     break;
   }
+
   if (x >= WIDTH || x < 0 || y >= HEIGHT || y < 0)
     gameover = 1;
   for (int i = 0; i < nTail; i++)
@@ -157,12 +174,15 @@ int snakeGameMain()
     Draw();
     Input();
     Logic();
-
+    
     int sec = 1;
     int start = *mtime;
     int end = start + sec * 10000000;
     while (*mtime < end)
       ;
   }
-  return 0;
+
+  printf("Game Over!\n");
+
+  return nTail - 1;
 }

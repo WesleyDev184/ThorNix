@@ -109,8 +109,8 @@ void entry()
 
     uart_init();
     printf("Uart initialized ...\n");
-    plic_init();
-    printf("Plic initialized ...\n");
+    // plic_init();
+    // printf("Plic initialized ...\n");
 
     asm volatile("mret"); // Salta para o endereço armazenado em mepc
 }

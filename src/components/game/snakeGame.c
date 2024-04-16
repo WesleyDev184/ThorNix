@@ -174,7 +174,7 @@ int snakeGameMain()
     Draw();
     Input();
     Logic();
-    
+
     int sec = 1;
     int start = *mtime;
     int end = start + sec * 10000000;

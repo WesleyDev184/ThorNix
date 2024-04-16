@@ -13,6 +13,10 @@ int main()
     int progress = 0;
     int i;
     puts(CLEAR_SCREEN CURSOR_UP_LEFT); /* Clear screen and move cursor to 1,1 */
+
+    i = snakeGame();
+    printf("Score: %d\n", i);
+
     welcomeScreen();
 
     for (;;)
@@ -23,11 +27,6 @@ int main()
 
         switch (c)
         {
-        case 'G':
-            i = snakeGame();
-            printf("Score: %d\n", i);
-            break;
-
         case 'E':
             // Força uma exceção
             r_mstatus(); // Tenta ler o registrador no modo Supervisor

@@ -112,7 +112,7 @@ void Input()
     if (dir != UP)
       dir = DOWN;
     break;
-  case 'x':
+  case 'Q':
     gameover = 1;
     break;
   default:
